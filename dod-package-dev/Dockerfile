@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 		devscripts \
 		dh-make \
 		dput-ng \
-		equivs \
+		equivs autotools-dev\
 		git bzr mercurial subversion \
 		git-buildpackage svn-buildpackage \
 		libcrypt-ssleay-perl \
