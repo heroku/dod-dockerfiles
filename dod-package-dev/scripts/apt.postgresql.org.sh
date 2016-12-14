@@ -43,7 +43,7 @@ case $CODENAME in
     sid|jessie|wheezy|squeeze|lenny|etch) ;;
     precise|lucid) ;;
     *) # unknown distribution, verify on the web
-	DISTURL="http://apt.postgresql.org/pub/repos/apt/dists/"
+	DISTURL="https://apt.postgresql.org/pub/repos/apt/dists/"
 	if [ -x /usr/bin/curl ]; then
 	    DISTHTML=$(curl -s $DISTURL)
 	elif [ -x /usr/bin/wget ]; then
