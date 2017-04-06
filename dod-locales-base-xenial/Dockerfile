@@ -13,9 +13,13 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN cp /usr/share/i18n/SUPPORTED /var/lib/locales/supported.d/all
 RUN dpkg-reconfigure -f noninteractive locales
 
-RUN apt-get update \
-	&& apt-get --force-yes dist-upgrade -y \
-	&& rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get \
+      --yes \
+      --allow-downgrades \
+      --allow-remove-essential \
+      --allow-change-held-packages \
+      dist-upgrade && \
+    rm -rf /var/lib/apt/lists/*
