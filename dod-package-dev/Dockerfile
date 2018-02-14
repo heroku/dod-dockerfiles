@@ -28,7 +28,6 @@ RUN apt-get update && apt-get install -y \
 		reprepro \
 		sudo \
 		ubuntu-dev-tools pbuilder \
-		ruby ruby-dev ruby-bundler\
 		--no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -60,8 +59,6 @@ ENV UBUNTUTOOLS_DEBIAN_MIRROR http://httpredir.debian.org/debian
 RUN { \
 	echo "APTCACHEHARDLINK='no'"; \
 } >> ~/.pbuilderrc
-
-RUN gem install --no-rdoc --no-ri package_cloud
 
 COPY scripts /heroku
 RUN /heroku/apt.postgresql.org.sh
