@@ -2,6 +2,7 @@ FROM ubuntu:bionic
 
 # let's make apt list package versions, since those are handy during devel
 RUN echo 'APT::Get::Show-Versions "1";' > /etc/apt/apt.conf.d/verbose
+ARG DEBIAN_FRONTEND=noninteractive
 
 # normal build deps
 RUN apt-get update && apt-get install -y \
