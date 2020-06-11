@@ -81,7 +81,6 @@ EOF
 echo "Importing repository signing key ..."
 KEYRING="/etc/apt/trusted.gpg.d/apt.postgresql.org.gpg"
 test -e $KEYRING || touch $KEYRING
-test -e $KEYRING || touch $KEYRING
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key --keyring $KEYRING add -
 
 echo "Running apt-get update ..."
