@@ -19,6 +19,6 @@ index ff9be29..a16bcbe 100755
  done
  echo "Generation complete."
 EOF
-git apply --ignore-space-change --ignore-whitespace patch-locale-gen.patch || exit
+git apply --ignore-space-change --ignore-whitespace patch-locale-gen.patch || exit 1
 
 echo "PATH=/opt/glibc-${TARGET_VERSION}-heroku/bin:$PATH" > /etc/environment
