@@ -25,4 +25,4 @@ workflows:
                 - main
           matrix:
             parameters:
-              base_flavor: ["trusty", "xenial", "bionic", "focal"]
+              base_flavor: ["xenial", "bionic", "focal"]
