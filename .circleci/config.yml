@@ -1,0 +1,28 @@
+version: 2.1
+jobs:
+  build_locale_base:
+    parameters:
+      base_flavor:
+        type: string
+    docker:
+      - image: circleci/ruby:2.7.2
+        environment:
+          CFLAGS: -Wno-error=format-overflow
+    environment:
+      GIT_REF: << pipeline.git.revision >>
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: docker build -f dod-locales-base-<< parameters.base_flavor >>/Dockerfile dod-locales-base-<<parameters.base_flavor>> -t heroku/dod-locale-base:<< parameters.base_flavor >>
+workflows:
+  build_locale_bases:
+    jobs:
+      - build_locale_base:
+          filters:
+            branches:
+              ignore:
+                - main
+          matrix:
+            parameters:
+              base_flavor: ["trusty", "xenial", "bionic", "focal"]
