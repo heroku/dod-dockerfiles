@@ -81,4 +81,5 @@ rm -rf \
   "glibc-${LOCALE_SOURCE_VERSION}" \
   "glibc-${TARGET_VERSION}" \
   "gnu-keyring.gpg" && \
+rm -rf *.xz.sig && \
 rm -rf /var/lib/apt/lists/*

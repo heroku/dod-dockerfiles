@@ -43,6 +43,10 @@ RUN dpkg-reconfigure -f noninteractive locales
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
+RUN apt-get --purge --yes remove python3 vim gcc gawk wget autoconf g++ git bison && apt-get autoremove --yes
+
+RUN rm -rf ${HOME}/*.sh ${HOME}/SUPPORTED
+
 # ensure distro is upgraded
 RUN apt-get update && \
     apt-get \
