@@ -5,10 +5,8 @@ set -eu -o pipefail
 WORKING_DIR=${HOME}
 LOCALE_SOURCE_VERSION=$1
 TARGET_VERSION=$2
-LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
 
 cd "${WORKING_DIR}" || exit && \
-apt-get update && apt-get install gnupg python3 vim gcc make gawk wget autoconf g++ git xz-utils bison -y && \
 wget "https://ftp.gnu.org/gnu/gnu-keyring.gpg" && \
 wget "https://ftp.gnu.org/gnu/glibc/glibc-${LOCALE_SOURCE_VERSION}.tar.xz" && \
 wget "https://ftp.gnu.org/gnu/glibc/glibc-${LOCALE_SOURCE_VERSION}.tar.xz.sig" && \
@@ -37,16 +35,44 @@ index df0257b..b82e841 100644
                           identification->category[num],
                           category_name[num]);
 EOF
+cat > evil-archive.patch << "EOF"
+diff --git a/locale/programs/localedef.c b/locale/programs/localedef.c
+index d74c5a34..2c771db5 100644
+--- a/locale/programs/localedef.c
++++ b/locale/programs/localedef.c
+@@ -519,10 +519,10 @@ construct_output_path (char *path)
+       ssize_t n;
+       if (normal == NULL)
+        n = asprintf (&result, "%s%s/%s%c", output_prefix ?: "",
+-                     COMPLOCALEDIR, path, '\0');
++                     "/usr/lib/locale", path, '\0');
+       else
+        n = asprintf (&result, "%s%s/%.*s%s%s%c",
+-                     output_prefix ?: "", COMPLOCALEDIR,
++                     output_prefix ?: "", "/usr/lib/locale",
+                      (int) (startp - path), path, normal, endp, '\0');
+
+       if (n < 0)
+diff --git a/locale/programs/locarchive.c b/locale/programs/locarchive.c
+index dccaf04e..012e1dd4 100644
+--- a/locale/programs/locarchive.c
++++ b/locale/programs/locarchive.c
+@@ -57,7 +57,7 @@
+
+ extern const char *output_prefix;
+
+-#define ARCHIVE_NAME COMPLOCALEDIR "/locale-archive"
++#define ARCHIVE_NAME "/usr/lib/locale" "/locale-archive"
+
+ static const char *locnames[] =
+   {
+EOF
 git apply --ignore-space-change --ignore-whitespace patch-localecheck.patch && \
+git apply --ignore-space-change --ignore-whitespace evil-archive.patch && \
 mkdir build && cd build && \
 ../configure --prefix="/opt/glibc-${TARGET_VERSION}-heroku" --disable-werror && \
 make -j "$(nproc)" && make install && \
-mkdir "/opt/glibc-${TARGET_VERSION}-heroku/lib/locale" && \
-"/opt/glibc-${TARGET_VERSION}-heroku"/bin/localedef -i en_US -f UTF-8 /usr/lib/locale/en_US.UTF-8 && \
-
-if [ -f "${LOCALE_ARCHIVE}" ]; then
-  rm "${LOCALE_ARCHIVE}"
-fi && \
+"/opt/glibc-${TARGET_VERSION}-heroku"/bin/localedef -i en_US -f UTF-8 en_US.UTF-8 && \
 
 cd "${WORKING_DIR}" || exit && \
 rm -rf \
@@ -55,4 +81,5 @@ rm -rf \
   "glibc-${LOCALE_SOURCE_VERSION}" \
   "glibc-${TARGET_VERSION}" \
   "gnu-keyring.gpg" && \
+rm -rf *.xz.sig && \
 rm -rf /var/lib/apt/lists/*

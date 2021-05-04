@@ -14,7 +14,7 @@ index ff9be29..a16bcbe 100755
              fi
         fi
 -       localedef $no_archive -i $input -c -f $charset $locale_alias $locale || :; \
-+       localedef $no_archive -i $input -c -f $charset $locale_alias "/usr/lib/locale/$locale" || :; \
++       /opt/glibc-2.31-heroku/bin/localedef $no_archive -i $input -c -f $charset $locale_alias $locale || :; \
         echo ' done'; \
  done
  echo "Generation complete."
