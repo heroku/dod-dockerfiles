@@ -1,0 +1,24 @@
+name: Build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    strategy:
+      matrix:
+        base_flavour: ["xenial", "bionic", "focal", "focal-2.23-locales", "focal-2.23-locpath"]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: docker/setup-buildx-action@v2
+    - uses: docker/build-push-action@v3
+      with:
+        context: dod-locales-base-${{ matrix.base_flavour }}
+        push: false
+        tags: heroku/dod-locale-base:${{ matrix.base_flavour }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
