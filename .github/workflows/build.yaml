@@ -22,7 +22,7 @@ jobs:
     - uses: docker/build-push-action@v3
       with:
         context: dod-locales-base-${{ matrix.base_flavour }}
-        push: true # needs to change
+        push: true
         tags: heroku/dod-locale-base:${{ matrix.base_flavour }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
