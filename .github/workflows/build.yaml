@@ -7,7 +7,7 @@ jobs:
   build:
     strategy:
       matrix:
-        base_flavour: ["xenial", "bionic", "focal", "focal-2.23-locales", "focal-2.23-locpath"]
+        base_flavour: ["xenial", "focal", "focal-2.23-locpath"]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
