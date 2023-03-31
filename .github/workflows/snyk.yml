@@ -1,0 +1,26 @@
+name: Snyk
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 5 * * 1'
+  push:
+    branches:
+      - main
+
+jobs:
+  snyk_security_node:
+    strategy:
+      matrix:
+        base_flavour: ["xenial", "focal", "focal-2.23-locpath"]
+    runs-on: ubuntu-latest
+    name: Snyk security scan
+    steps:
+      - uses: actions/checkout@v3
+      - name: snyk
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: "--severity-threshold=high --file=dod-locales-base-${{ matrix.base_flavour }}/Dockerfile"
+          image: "heroku/dod-locale-base:${{ matrix.base_flavour }}"
+          command: monitor
