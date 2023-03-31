@@ -21,6 +21,6 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: "--severity-threshold=high --file=dod-locales-base-${{ matrix.base_flavour }}/Dockerfile"
+          args: "--severity-threshold=high --file=dod-locales-base-${{ matrix.base_flavour }}/Dockerfile --project-name=heroku/dod-locale-base/{{ matrix.base_flavour }}"
           image: "heroku/dod-locale-base:${{ matrix.base_flavour }}"
           command: monitor
